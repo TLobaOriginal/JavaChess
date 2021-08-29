@@ -13,15 +13,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/*
+ * Created by Joseph Ogunbiyi on 16/03/21
+ */
+
 public class Bishop extends Piece {
 
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES ={-9, -7, 7, 9};
 
-    Bishop(int piecePosition, Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Bishop(final int piecePosition, final Alliance pieceAlliance) {
+        super(piecePosition, pieceAlliance, PieceType.BISHOP);
     }
 
-
+    @Override
+    public String toString(){
+        return PieceType.BISHOP.toString();
+    }
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {

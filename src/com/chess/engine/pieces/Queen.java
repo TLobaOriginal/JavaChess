@@ -11,12 +11,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/*
+ * Created by Joseph Ogunbiyi on 16/03/21
+ */
+
 public class Queen extends Piece{
 
     private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES ={-9,-8, -7, -1, 1, 8, 7, 9};
 
-    Queen(int piecePosition, Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Queen(final int piecePosition, final Alliance pieceAlliance) {
+        super(piecePosition, pieceAlliance, PieceType.QUEEN);
+    }
+
+    public String toString(){
+        return PieceType.QUEEN.toString();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 /*
  * Created by Joseph Ogunbiyi on 16/03/21
@@ -46,6 +47,11 @@ public abstract class Tile {
         }
 
         @Override
+        public String toString(){
+            return "-";
+        }
+
+        @Override
         public boolean isTileOccupied() {
             return false;
         }
@@ -63,6 +69,12 @@ public abstract class Tile {
         OccupiedTile(final int tileCoordinate, final Piece pieceOnTile){
             super(tileCoordinate);
             this.pieceOnTile = pieceOnTile;
+        }
+
+        @Override
+        public String toString(){
+            return this.getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase(Locale.ROOT) :
+                    getPiece().toString();
         }
 
         @Override

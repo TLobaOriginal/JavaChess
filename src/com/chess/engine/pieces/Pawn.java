@@ -21,8 +21,13 @@ public class Pawn extends Piece {
 
     private final static int[] CANDIDATE_MOVE_COORDINATES = {8, 16, 7, 9};
 
-    Pawn(int piecePosition, Alliance pieceAlliance) {
-        super(piecePosition, pieceAlliance);
+    public Pawn(final int piecePosition, final Alliance pieceAlliance) {
+        super(piecePosition, pieceAlliance, PieceType.PAWN);
+    }
+
+    @Override
+    public String toString(){
+        return PieceType.PAWN.toString();
     }
 
     @Override
