@@ -2,6 +2,7 @@ package com.chess.engine.board;
 
 import com.chess.engine.pieces.Pawn;
 import com.chess.engine.pieces.Piece;
+import com.chess.engine.pieces.Rook;
 
 import static com.chess.engine.board.Board.*;
 
@@ -22,6 +23,10 @@ public abstract class Move {
         this.board = board;
         this.movedPiece = movedPiece;
         this.destinationCoordinate = destinationCoordinate;
+    }
+
+    public boolean isCastlingMove(){
+        return false;
     }
 
     @Override
@@ -67,9 +72,10 @@ public abstract class Move {
     public Board execute() {
         final Builder builder = new Builder(); //Materialise a new board
         for(Piece piece: board.getCurrentPlayer().getActivePieces()){
-            if(!this.movedPiece.equals(piece)){
+            if(!this.movedPiece.equals(piece))
                 builder.setPiece(piece);
-            }
+            else
+                builder.setPiece(this.movedPiece.movePiece(this));
         }
 
         for(Piece piece: board.getCurrentPlayer().getOpponent().getActivePieces()){
@@ -198,31 +204,82 @@ public abstract class Move {
         }
     }
 
-    public static abstract class CastleMove extends Move{
+    static abstract class CastleMove extends Move{
+        protected final Rook castRook;
+        protected final int castleRookStart;
+        protected final int castleRookDestination;
 
         public CastleMove(final Board board,
                          final Piece movePiece,
-                         final int destinationCoordinate) {
+                         final int destinationCoordinate,
+                          final Rook castRook,
+                          final int castleRookStart,
+                          final int castleRookDestination) {
             super(board, movePiece, destinationCoordinate);
+
+            this.castRook = castRook;
+            this.castleRookStart = castleRookStart;
+            this.castleRookDestination = castleRookDestination;
         }
+
+        public Rook getCastRook() {
+            return castRook;
+        }
+        @Override
+        public boolean isCastlingMove(){
+            return true;
+        }
+
+        @Override
+        public Board execute(){
+            final Builder builder = new Builder();
+            for(final Piece piece: this.board.getCurrentPlayer().getActivePieces()){
+                if(!this.movedPiece.equals(piece) && !this.castRook.equals(piece)) { //If the piece being set is not the moved piece or the castle rook then set the piece
+                    builder.setPiece(piece);
+                }
+            }
+            for(final Piece piece: this.board.getCurrentPlayer().getOpponent().getActivePieces()){
+                builder.setPiece(piece);
+            }
+            builder.setPiece(this.movedPiece.movePiece(this));
+            builder.setPiece(new Rook(this.castleRookDestination, this.castRook.getPieceAlliance()));
+            builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
+            return builder.build();
+        }
+
     }
 
-    public static final class KingSideCastleMove extends Move{
+    public static final class KingSideCastleMove extends CastleMove{
         /*Implementation of the special move King Side Castle
         * We will then have to check the requirements for whether this is a legal move*/
         public KingSideCastleMove(final Board board,
-                        final Piece movePiece,
-                        final int destinationCoordinate) {
-            super(board, movePiece, destinationCoordinate);
+                                  final Piece movePiece,
+                                  final int destinationCoordinate,
+                                  final Rook castRook,
+                                  final int castleRookStart,
+                                  final int castleRookDestination) {
+            super(board, movePiece, destinationCoordinate, castRook, castleRookStart, castleRookDestination);
+        }
+
+        @Override
+        public String toString(){
+            return "0-0";
         }
     }
 
-    public static final class QueenSideCastleMove extends Move{
+    public static final class QueenSideCastleMove extends CastleMove{
         /*Implementation of the special move King Side Castle*/
         public QueenSideCastleMove(final Board board,
-                                  final Piece movePiece,
-                                  final int destinationCoordinate) {
-            super(board, movePiece, destinationCoordinate);
+                                   final Piece movePiece,
+                                   final int destinationCoordinate,
+                                   final Rook castRook,
+                                   final int castleRookStart,
+                                   final int castleRookDestination) {
+            super(board, movePiece, destinationCoordinate, castRook, castleRookStart, castleRookDestination);
+        }
+        @Override
+        public String toString(){
+            return "0-0";
         }
     }
 

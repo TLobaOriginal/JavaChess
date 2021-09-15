@@ -6,6 +6,7 @@ import com.chess.engine.board.Move;
 import com.chess.engine.pieces.King;
 import com.chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,12 +23,14 @@ public abstract class Player {
            final Collection<Move> legalMoves,
            final Collection<Move> opponentsMoves){
         this.board = board;
+       // this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentsMoves))); // So we know the opponents moves too so we can have TRUE legal moves
+                                                                                                                                     //So now we have king castles added in
         this.legalMoves = legalMoves;
         this.playerKing = establishKing();
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentsMoves).isEmpty();
     }
 
-    private static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
+    protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
         /* By calculating all the moves that result in a piece moving to a specific tile
         * Then we can even use this to check to see whether or not a king is in check.*/
 
@@ -106,4 +109,5 @@ public abstract class Player {
     public abstract Collection<Piece> getActivePieces();
     public abstract Alliance getAlliance();
     public abstract Player getOpponent();
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentLegals);
 }

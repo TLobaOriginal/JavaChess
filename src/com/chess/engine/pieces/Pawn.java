@@ -44,8 +44,8 @@ public class Pawn extends Piece {
                 //TODO more work to do here!!!
                 legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate)); //will be changed to Pawn move
             } else if(currentCandidateOffset == 16 && this.isFirstMove() && /**IF WE WANNA JUMP TWO SQUARES*/
-                    (BoardUtils.SECOND_ROW[this.piecePosition] && this.getPieceAlliance().isBlack()) ||
-                    (BoardUtils.SEVENTH_ROW[this.piecePosition] && this.getPieceAlliance().isWhite())){
+                    (BoardUtils.SEVENTH_RANK[this.piecePosition] && this.getPieceAlliance().isBlack()) ||
+                    (BoardUtils.SECOND_RANK[this.piecePosition] && this.getPieceAlliance().isWhite())){
                 final int behindCandidateDestinationCoordinate = this.piecePosition + (this.pieceAlliance.getDirection() * 8);
                 if(!board.getTile(behindCandidateDestinationCoordinate).isTileOccupied() &&
                         !board.getTile(candidateDestinationCoordinate).isTileOccupied()){
@@ -73,5 +73,10 @@ public class Pawn extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    @Override
+    public Piece movePiece(Move move) {
+        return new Pawn(move.getDestinationCoordinate(), this.getPieceAlliance());
     }
 }

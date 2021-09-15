@@ -40,6 +40,10 @@ public abstract class Tile {
 
     public abstract Piece getPiece(); //Get the piece of a tile
 
+    public int getTileCoordinate(){
+        return this.tileCoordinate;
+    };
+
     public static final class EmptyTile extends Tile{
 
         EmptyTile(final int coordinate){

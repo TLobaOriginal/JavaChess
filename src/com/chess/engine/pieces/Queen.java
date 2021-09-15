@@ -62,6 +62,11 @@ public class Queen extends Piece{
         return ImmutableList.copyOf(LegalMoves);
     }
 
+    @Override
+    public Piece movePiece(Move move) {
+        return new Queen(move.getDestinationCoordinate(), this.getPieceAlliance());
+    }
+
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset){
         return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1 ||candidateOffset == -9 || candidateOffset == 7);
     }
